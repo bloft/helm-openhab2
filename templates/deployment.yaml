@@ -1,0 +1,95 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "openhab2.fullname" . }}
+  labels:
+    {{- include "openhab2.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "openhab2.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "openhab2.selectorLabels" . | nindent 8 }}
+    spec:
+    {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      serviceAccountName: {{ include "openhab2.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            {{- toYaml .Values.env | nindent 12 }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          volumeMounts:
+            - mountPath: /etc/localtime
+              name: localtime
+              readOnly: true
+            - mountPath: /etc/timezone
+              name: timezone
+              readOnly: true
+            - mountPath: /openhab/conf
+              name: data
+              subPath: conf
+            - mountPath: /openhab/userdata
+              name: data
+              subPath: userdata
+            - mountPath: /openhab/addons
+              name: data
+              subPath: addons
+            - mountPath: /openhab/.java
+              name: data
+              subPath: .java
+            {{- range .Values.volume.other }}
+            - mountPath: {{ .mountPath }}
+              name: {{ .name }}
+            {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      volumes:
+        - name: data
+          {{- toYaml .Values.volume.data | nindent 10 }}
+        - name: localtime
+          hostPath:
+            path: /etc/localtime
+            type: File
+        - name: timezone
+          hostPath:
+            path: /etc/timezone
+            type: File
+        {{- range .Values.volume.other }}
+        - name: {{ .name }}
+          {{- toYaml .mount | nindent 10 }}
+        {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
