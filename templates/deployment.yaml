@@ -23,72 +23,72 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-        - name: {{ .Chart.Name }}
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          env:
-            {{- toYaml .Values.env | nindent 12 }}
-          ports:
-            - name: http
-              containerPort: 8080
-              protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
-          startupProbe:
-            httpGet:
-              path: /
-              port: http
-            failureThreshold: 60
+      - name: {{ .Chart.Name }}
+        securityContext:
+          {{- toYaml .Values.securityContext | nindent 12 }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        env:
+          {{- toYaml .Values.env | nindent 12 }}
+        ports:
+          - name: http
+            containerPort: 8080
+            protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+        startupProbe:
+          httpGet:
+            path: /
+            port: http
+          failureThreshold: 60
 
-          volumeMounts:
-            - mountPath: /etc/localtime
-              name: localtime
-              readOnly: true
-            - mountPath: /etc/timezone
-              name: timezone
-              readOnly: true
-            - mountPath: /openhab/conf
-              name: storage
+        volumeMounts:
+          - mountPath: /etc/localtime
+            name: localtime
+            readOnly: true
+          - mountPath: /etc/timezone
+            name: timezone
+            readOnly: true
+          - mountPath: /openhab/conf
+            name: storage
 {{- if .Values.persistence.subPath }}
-              subPath: {{ .Values.persistence.subPath }}/conf
+            subPath: {{ .Values.persistence.subPath }}/conf
 {{- else }}
-              subPath: conf
+            subPath: conf
 {{- end }}
-            - mountPath: /openhab/userdata
-              name: storage
+          - mountPath: /openhab/userdata
+            name: storage
 {{- if .Values.persistence.subPath }}
-              subPath: {{ .Values.persistence.subPath }}/userdata
+            subPath: {{ .Values.persistence.subPath }}/userdata
 {{- else }}
-              subPath: userdata
+            subPath: userdata
 {{- end }}
-            - mountPath: /openhab/addons
-              name: storage
+          - mountPath: /openhab/addons
+            name: storage
 {{- if .Values.persistence.subPath }}
-              subPath: {{ .Values.persistence.subPath }}/addons
+            subPath: {{ .Values.persistence.subPath }}/addons
 {{- else }}
-              subPath: addons
+            subPath: addons
 {{- end }}
-            - mountPath: /openhab/.java
-              name: storage
+          - mountPath: /openhab/.java
+            name: storage
 {{- if .Values.persistence.subPath }}
-              subPath: {{ .Values.persistence.subPath }}/.java
+            subPath: {{ .Values.persistence.subPath }}/.java
 {{- else }}
-              subPath: .java
+            subPath: .java
 {{- end }}
-            {{- range .Values.volume.other }}
-            - mountPath: {{ .mountPath }}
-              name: {{ .name }}
-            {{- end }}
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+          {{- range .Values.volume.other }}
+          - mountPath: {{ .mountPath }}
+            name: {{ .name }}
+          {{- end }}
+        resources:
+          {{- toYaml .Values.resources | nindent 10 }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
