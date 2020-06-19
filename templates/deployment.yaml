@@ -1,3 +1,4 @@
+{{ if (or (not .Values.persistence.enabled) (eq .Values.persistence.type "pvc")) }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -25,7 +26,7 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             {{- toYaml .Values.env | nindent 12 }}
@@ -41,6 +42,12 @@ spec:
             httpGet:
               path: /
               port: http
+          startupProbe:
+            httpGet:
+              path: /
+              port: http
+            failureThreshold: 60
+
           volumeMounts:
             - mountPath: /etc/localtime
               name: localtime
@@ -49,17 +56,33 @@ spec:
               name: timezone
               readOnly: true
             - mountPath: /openhab/conf
-              name: data
+              name: storage
+{{- if .Values.persistence.subPath }}
+              subPath: {{ .Values.persistence.subPath }}/conf
+{{- else }}
               subPath: conf
+{{- end }}
             - mountPath: /openhab/userdata
-              name: data
+              name: storage
+{{- if .Values.persistence.subPath }}
+              subPath: {{ .Values.persistence.subPath }}/userdata
+{{- else }}
               subPath: userdata
+{{- end }}
             - mountPath: /openhab/addons
-              name: data
+              name: storage
+{{- if .Values.persistence.subPath }}
+              subPath: {{ .Values.persistence.subPath }}/addons
+{{- else }}
               subPath: addons
+{{- end }}
             - mountPath: /openhab/.java
-              name: data
+              name: storage
+{{- if .Values.persistence.subPath }}
+              subPath: {{ .Values.persistence.subPath }}/.java
+{{- else }}
               subPath: .java
+{{- end }}
             {{- range .Values.volume.other }}
             - mountPath: {{ .mountPath }}
               name: {{ .name }}
@@ -75,8 +98,13 @@ spec:
         {{- toYaml . | nindent 8 }}
     {{- end }}
       volumes:
-        - name: data
-          {{- toYaml .Values.volume.data | nindent 10 }}
+        - name: storage
+{{- if and .Values.persistence.enabled (eq .Values.persistence.type "pvc") }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistence.existingClaim | default (include "openhab2.fullname" .) }}
+{{- else }}
+          emptyDir: {}
+{{- end }}
         - name: localtime
           hostPath:
             path: /etc/localtime
@@ -93,3 +121,4 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
     {{- end }}
+{{- end }}
