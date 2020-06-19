@@ -108,11 +108,9 @@ spec:
         - name: localtime
           hostPath:
             path: /etc/localtime
-            type: File
         - name: timezone
           hostPath:
             path: /etc/timezone
-            type: File
         {{- range .Values.volume.other }}
         - name: {{ .name }}
           {{- toYaml .mount | nindent 10 }}
