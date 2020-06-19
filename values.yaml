@@ -71,7 +71,7 @@ volume:
 #          path: /dev/ttyUSB0
   
 
-env: {}
+env: []
 
 nodeSelector: {}
 
