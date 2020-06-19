@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: openhab/openhab
-  tag: 2.5.2
+  tag: 2.5.5
   pullPolicy: IfNotPresent
 
 serviceAccount:
