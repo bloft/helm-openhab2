@@ -16,7 +16,8 @@ serviceAccount:
 podSecurityContext: {}
   # fsGroup: 2000
 
-securityContext: {}
+securityContext:
+  privileged: true
   # capabilities:
   #   drop:
   #   - ALL
@@ -44,8 +45,8 @@ persistence:
     - ReadWriteOnce
   size: 10Gi
   # annotations: {}
-  finalizers:
-    - kubernetes.io/pvc-protection
+  finalizers: {}
+  #  - kubernetes.io/pvc-protection
   # subPath: ""
   # existingClaim:
 
