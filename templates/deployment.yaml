@@ -46,11 +46,6 @@ spec:
           httpGet:
             path: /
             port: http
-        startupProbe:
-          httpGet:
-            path: /
-            port: http
-          failureThreshold: 60
 
         volumeMounts:
           - mountPath: /etc/localtime
@@ -87,6 +82,8 @@ spec:
 {{- else }}
             subPath: .java
 {{- end }}
+          - mountPath: /openhab/userdata/tmp
+            name: tmp
           {{- range .Values.volume.other }}
           - mountPath: {{ .mountPath }}
             name: {{ .name }}
@@ -109,6 +106,8 @@ spec:
 {{- else }}
           emptyDir: {}
 {{- end }}
+        - name: tmp
+          emptyDir: {}
         - name: localtime
           hostPath:
             path: /etc/localtime
