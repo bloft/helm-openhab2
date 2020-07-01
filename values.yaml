@@ -39,7 +39,7 @@ ingress:
 
 persistence:
   type: pvc
-  enabled: true
+  enabled: false
   storageClassName: nfs
   accessModes:
     - ReadWriteOnce

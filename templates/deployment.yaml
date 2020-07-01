@@ -104,7 +104,8 @@ spec:
           persistentVolumeClaim:
             claimName: {{ .Values.persistence.existingClaim | default (include "openhab2.fullname" .) }}
 {{- else }}
-          emptyDir: {}
+          hostPath:
+            path: /data/openhab2
 {{- end }}
         - name: tmp
           emptyDir: {}
