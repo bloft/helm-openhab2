@@ -72,7 +72,9 @@ volume:
 #          path: /dev/ttyUSB0
   
 
-env: []
+env:
+  - name: "CRYPTO_POLICY"
+    value: "unlimited"
 
 nodeSelector: {}
 
