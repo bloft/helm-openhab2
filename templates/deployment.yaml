@@ -1,4 +1,3 @@
-{{ if (or (not .Values.persistence.enabled) (eq .Values.persistence.type "pvc")) }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -29,7 +28,7 @@ spec:
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         env:
-          {{- toYaml .Values.env | nindent 12 }}
+          {{- toYaml .Values.env | nindent 10 }}
         ports:
           - name: http
             containerPort: 8080
@@ -82,8 +81,6 @@ spec:
 {{- else }}
             subPath: .java
 {{- end }}
-          - mountPath: /openhab/userdata/tmp
-            name: tmp
           {{- range .Values.volume.other }}
           - mountPath: {{ .mountPath }}
             name: {{ .name }}
@@ -103,12 +100,13 @@ spec:
 {{- if and .Values.persistence.enabled (eq .Values.persistence.type "pvc") }}
           persistentVolumeClaim:
             claimName: {{ .Values.persistence.existingClaim | default (include "openhab2.fullname" .) }}
-{{- else }}
+{{- else if and .Values.persistence.enabled (eq .Values.persistence.type "hostPath") }}
           hostPath:
-            path: /data/openhab2
-{{- end }}
-        - name: tmp
+            path: {{ .Values.persistence.hostPath }}
+            type: DirectoryOrCreate
+{{- else }}
           emptyDir: {}
+{{- end }}
         - name: localtime
           hostPath:
             path: /etc/localtime
@@ -123,4 +121,3 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
     {{- end }}
-{{- end }}

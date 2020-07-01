@@ -38,8 +38,10 @@ ingress:
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
 
 persistence:
-  type: pvc
-  enabled: false
+  enabled: true
+  # type can be pvc or hostPath
+  type: hostPath
+  hostPath: /data/openhab2
   storageClassName: nfs
   accessModes:
     - ReadWriteOnce
