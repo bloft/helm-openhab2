@@ -67,11 +67,11 @@ resources: {}
 volume:
   other:
 # https://kubernetes.io/docs/concepts/storage/volumes/#hostpath
-#    - name: zwave
-#      mountPath: /dev/ttyUSB0
-#      mount:
-#        hostPath:
-#          path: /dev/ttyUSB0
+    - name: zwave
+      mountPath: /dev/zwave
+      mount:
+        hostPath:
+          path: /dev/zwave
   
 
 env:
