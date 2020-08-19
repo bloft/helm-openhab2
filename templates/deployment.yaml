@@ -26,6 +26,54 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
+{{- if .Values.sidecar.service.enabled }}
+      - name: {{ .Chart.Name }}-service
+        image: "{{ .Values.sidecar.image }}"
+        imagePullPolicy: {{ .Values.sidecar.imagePullPolicy }}
+        env:
+          - name: METHOD
+            value: LIST
+          - name: LABEL
+            value: "{{ .Values.sidecar.service.label }}"
+          - name: FOLDER
+            value: "/openhab/conf/services"
+          - name: RESOURCE
+            value: "both"
+          - name: NAMESPACE
+            value: "ALL"
+        volumeMounts:
+          - name: storage
+            mountPath: "/openhab/conf"
+            {{- if .Values.persistence.subPath }}
+            subPath: {{ .Values.persistence.subPath }}/conf
+            {{- else }}
+            subPath: conf
+            {{- end}}
+{{- end}}
+{{- if .Values.sidecar.persistence.enabled }}
+      - name: {{ .Chart.Name }}-persistence
+        image: "{{ .Values.sidecar.image }}"
+        imagePullPolicy: {{ .Values.sidecar.imagePullPolicy }}
+        env:
+          - name: METHOD
+            value: LIST
+          - name: LABEL
+            value: "{{ .Values.sidecar.persistence.label }}"
+          - name: FOLDER
+            value: "/openhab/conf/persistence"
+          - name: RESOURCE
+            value: "both"
+          - name: NAMESPACE
+            value: "ALL"
+        volumeMounts:
+          - name: storage
+            mountPath: "/openhab/conf"
+            {{- if .Values.persistence.subPath }}
+            subPath: {{ .Values.persistence.subPath }}/conf
+            {{- else }}
+            subPath: conf
+            {{- end}}
+{{- end}}
       - name: {{ .Chart.Name }}
         securityContext:
           {{- toYaml .Values.securityContext | nindent 12 }}

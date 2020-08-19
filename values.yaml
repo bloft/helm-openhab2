@@ -64,6 +64,16 @@ resources: {}
   #   cpu: 100m
   #   memory: 128Mi
 
+sidecar:
+  image: kiwigrid/k8s-sidecar:0.1.144
+  imagePullPolicy: IfNotPresent
+  persistence:
+    enabled: true
+    label: openhab_persist
+  service:
+    enabled: true
+    label: openhab_service
+
 volume:
   other:
 # https://kubernetes.io/docs/concepts/storage/volumes/#hostpath
