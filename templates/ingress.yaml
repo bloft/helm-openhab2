@@ -29,7 +29,7 @@ spec:
             backend:
               serviceName: {{ $fullName }}
               servicePort:  {{ .Values.service.port }}
-          - path: /
+          - path: /webdav
             backend:
               serviceName: {{ $fullName }}
               servicePort: {{ .Values.webdav.port }}
