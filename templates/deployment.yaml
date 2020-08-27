@@ -138,6 +138,42 @@ spec:
           - mountPath: {{ .mountPath }}
             name: {{ .name }}
           {{- end }}
+{{- if .Values.webdav.enabled }}
+      - name: {{ .Chart.Name }}-webdav
+        image: lead4good/webdav
+        command: [/bin/bash, -c, "sed -i s/80/8001/g /etc/nginx/sites-enabled/webdav-site.conf && /set_htpasswd.sh && nginx -g \"daemon off;\""]
+        ports:
+        - containerPort: 8001
+        volumeMounts:
+          - mountPath: /var/www/conf
+            name: storage
+{{- if .Values.persistence.subPath }}
+            subPath: {{ .Values.persistence.subPath }}/conf
+{{- else }}
+            subPath: conf
+{{- end }}
+          - mountPath: /var/www/userdata
+            name: storage
+{{- if .Values.persistence.subPath }}
+            subPath: {{ .Values.persistence.subPath }}/userdata
+{{- else }}
+            subPath: userdata
+{{- end }}
+          - mountPath: /var/www/addons
+            name: storage
+{{- if .Values.persistence.subPath }}
+            subPath: {{ .Values.persistence.subPath }}/addons
+{{- else }}
+            subPath: addons
+{{- end }}
+          - mountPath: /var/www/.java
+            name: storage
+{{- if .Values.persistence.subPath }}
+            subPath: {{ .Values.persistence.subPath }}/.java
+{{- else }}
+            subPath: .java
+{{- end }}
+{{- end }}
         resources:
           {{- toYaml .Values.resources | nindent 10 }}
       {{- with .Values.nodeSelector }}

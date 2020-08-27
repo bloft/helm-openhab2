@@ -11,5 +11,9 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
+    - port: {{ .Values.webdav.port }}
+      targetPort: 8001
+      protocol: TCP
+      name: webdav
   selector:
     {{- include "openhab2.selectorLabels" . | nindent 4 }}

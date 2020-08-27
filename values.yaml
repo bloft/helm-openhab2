@@ -64,6 +64,10 @@ resources: {}
   #   cpu: 100m
   #   memory: 128Mi
 
+webdav:
+  enabled: true
+  port: 8001
+
 sidecar:
   image: kiwigrid/k8s-sidecar:0.1.144
   imagePullPolicy: IfNotPresent
