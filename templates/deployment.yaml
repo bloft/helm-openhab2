@@ -145,28 +145,28 @@ spec:
         ports:
         - containerPort: 8001
         volumeMounts:
-          - mountPath: /var/www/conf
+          - mountPath: /var/www/webdav/conf
             name: storage
 {{- if .Values.persistence.subPath }}
             subPath: {{ .Values.persistence.subPath }}/conf
 {{- else }}
             subPath: conf
 {{- end }}
-          - mountPath: /var/www/userdata
+          - mountPath: /var/www/webdav/userdata
             name: storage
 {{- if .Values.persistence.subPath }}
             subPath: {{ .Values.persistence.subPath }}/userdata
 {{- else }}
             subPath: userdata
 {{- end }}
-          - mountPath: /var/www/addons
+          - mountPath: /var/www/webdav/addons
             name: storage
 {{- if .Values.persistence.subPath }}
             subPath: {{ .Values.persistence.subPath }}/addons
 {{- else }}
             subPath: addons
 {{- end }}
-          - mountPath: /var/www/.java
+          - mountPath: /var/www/webdav/.java
             name: storage
 {{- if .Values.persistence.subPath }}
             subPath: {{ .Values.persistence.subPath }}/.java
