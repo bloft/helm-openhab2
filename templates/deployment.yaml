@@ -142,8 +142,15 @@ spec:
       - name: {{ .Chart.Name }}-webdav
         image: lead4good/webdav
         command: [/bin/bash, -c, "sed -i s/80/8001/g /etc/nginx/sites-enabled/webdav-site.conf && /set_htpasswd.sh && nginx -g \"daemon off;\""]
+        env:
+          - name: WEBDAV_USERNAME
+            value: "{{ .Values.webdav.user }}"
+          - name: WEBDAV_PASSWORD
+            value: "{{ .Values.webdav.pass }}"
         ports:
-        - containerPort: 8001
+          - name: webdav
+            containerPort: 8001
+            protocol: TCP
         volumeMounts:
           - mountPath: /var/www/webdav/conf
             name: storage

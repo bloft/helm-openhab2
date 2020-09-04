@@ -67,6 +67,8 @@ resources: {}
 webdav:
   enabled: true
   port: 8001
+  user: ""
+  pass: ""
 
 sidecar:
   image: kiwigrid/k8s-sidecar:0.1.144

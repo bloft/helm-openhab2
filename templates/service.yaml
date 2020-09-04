@@ -12,7 +12,7 @@ spec:
       protocol: TCP
       name: http
     - port: {{ .Values.webdav.port }}
-      targetPort: 8001
+      targetPort: webdav
       protocol: TCP
       name: webdav
   selector:
