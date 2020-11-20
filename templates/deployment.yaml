@@ -81,8 +81,6 @@ spec:
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         env:
-          - name: OPENHAB_HTTP_PORT
-            value: {{ .Values.service.port }}
           {{- toYaml .Values.env | nindent 10 }}
         ports:
           - name: http
