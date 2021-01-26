@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: openhab/openhab
-  tag: 2.5.10
+  tag: 3.0
   pullPolicy: IfNotPresent
 
 serviceAccount:
@@ -40,9 +40,8 @@ ingress:
 persistence:
   enabled: true
   # type can be pvc or hostPath
-  type: hostPath
-  hostPath: /data/openhab2
-  storageClassName: nfs
+  type: pvc
+  storageClassName: local-path
   accessModes:
     - ReadWriteOnce
   size: 10Gi
@@ -81,13 +80,13 @@ sidecar:
     label: openhab_service
 
 volume:
-  other:
+  other: {}
 # https://kubernetes.io/docs/concepts/storage/volumes/#hostpath
-    - name: zwave
-      mountPath: /dev/zwave
-      mount:
-        hostPath:
-          path: /dev/zwave
+#    - name: zwave
+#      mountPath: /dev/zwave
+#      mount:
+#        hostPath:
+#          path: /dev/zwave
   
 
 env:
