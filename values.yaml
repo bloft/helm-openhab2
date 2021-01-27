@@ -35,10 +35,10 @@ ingress:
   tls: true
   annotations: 
     kubernetes.io/ingress.class: nginx
-    # nginx.ingress.kubernetes.io/enable-global-auth: "false"
-    nginx.ingress.kubernetes.io/configuration-snippet: |
-      add_header Set-Cookie X-OPENHAB-AUTH-HEADER=1;
-      proxy_set_header Authorization "";
+    nginx.ingress.kubernetes.io/enable-global-auth: "false"
+    #    nginx.ingress.kubernetes.io/configuration-snippet: |
+    #  add_header Set-Cookie X-OPENHAB-AUTH-HEADER=1;
+    #  proxy_set_header Authorization "";
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
 
 persistence:
