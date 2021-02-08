@@ -157,28 +157,28 @@ spec:
             containerPort: {{ .Values.webdav.port }}
             protocol: TCP
         volumeMounts:
-          - mountPath: /media/conf
+          - mountPath: /media/webdav/conf
             name: storage
 {{- if .Values.persistence.subPath }}
             subPath: {{ .Values.persistence.subPath }}/conf
 {{- else }}
             subPath: conf
 {{- end }}
-          - mountPath: /media/userdata
+          - mountPath: /media/webdav/userdata
             name: storage
 {{- if .Values.persistence.subPath }}
             subPath: {{ .Values.persistence.subPath }}/userdata
 {{- else }}
             subPath: userdata
 {{- end }}
-          - mountPath: /media/addons
+          - mountPath: /media/webdav/addons
             name: storage
 {{- if .Values.persistence.subPath }}
             subPath: {{ .Values.persistence.subPath }}/addons
 {{- else }}
             subPath: addons
 {{- end }}
-          - mountPath: /media/.java
+          - mountPath: /media/webdav/.java
             name: storage
 {{- if .Values.persistence.subPath }}
             subPath: {{ .Values.persistence.subPath }}/.java
