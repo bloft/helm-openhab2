@@ -157,6 +157,8 @@ spec:
             containerPort: {{ .Values.webdav.port }}
             protocol: TCP
         volumeMounts:
+          - mountPath: /media/webdav
+            name: temp
           - mountPath: /media/webdav/conf
             name: storage
 {{- if .Values.persistence.subPath }}
@@ -211,6 +213,8 @@ spec:
         - name: localtime
           hostPath:
             path: /etc/localtime
+        - name: temp
+          emptyDir: {}
         - name: timezone
           hostPath:
             path: /etc/timezone
