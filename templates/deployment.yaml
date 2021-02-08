@@ -144,7 +144,7 @@ spec:
 {{- if .Values.webdav.enabled }}
       - name: {{ .Chart.Name }}-webdav
         image: ionelmc/webdav
-        command: [/bin/bash, -c, "chmod 777 /media && /entrypoint.sh && sed -i s/8080/{{ .Values.webdav.port }}/g /etc/nginx/nginx.conf && nginx -g \"daemon off;\""]
+        command: [/bin/bash, -c, "sed -i s/8080/{{ .Values.webdav.port }}/g /etc/nginx/nginx.conf && nginx -g \"daemon off;\""]
         env:
           - name: WEBDAV_USERNAME
             value: "{{ .Values.webdav.user }}"
@@ -157,35 +157,12 @@ spec:
             containerPort: {{ .Values.webdav.port }}
             protocol: TCP
         volumeMounts:
-          - mountPath: /media/webdav
+          - mountPath: /media
             name: temp
-          - mountPath: /media/webdav/conf
+          - mountPath: /media/webdav
             name: storage
 {{- if .Values.persistence.subPath }}
-            subPath: {{ .Values.persistence.subPath }}/conf
-{{- else }}
-            subPath: conf
-{{- end }}
-          - mountPath: /media/webdav/userdata
-            name: storage
-{{- if .Values.persistence.subPath }}
-            subPath: {{ .Values.persistence.subPath }}/userdata
-{{- else }}
-            subPath: userdata
-{{- end }}
-          - mountPath: /media/webdav/addons
-            name: storage
-{{- if .Values.persistence.subPath }}
-            subPath: {{ .Values.persistence.subPath }}/addons
-{{- else }}
-            subPath: addons
-{{- end }}
-          - mountPath: /media/webdav/.java
-            name: storage
-{{- if .Values.persistence.subPath }}
-            subPath: {{ .Values.persistence.subPath }}/.java
-{{- else }}
-            subPath: .java
+            subPath: {{ .Values.persistence.subPath }}
 {{- end }}
 {{- end }}
         resources:
