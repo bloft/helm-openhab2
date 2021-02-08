@@ -144,7 +144,7 @@ spec:
 {{- if .Values.webdav.enabled }}
       - name: {{ .Chart.Name }}-webdav
         image: ionelmc/webdav
-        command: [/bin/bash, -c, "sed -i s/8080/{{ .Values.webdav.port }}/g /etc/nginx/nginx.conf && nginx -g \"daemon off;\""]
+        command: [/bin/bash, -c, "/entrypoint.sh && sed -i s/8080/{{ .Values.webdav.port }}/g /etc/nginx/nginx.conf && nginx -g \"daemon off;\""]
         env:
           - name: WEBDAV_USERNAME
             value: "{{ .Values.webdav.user }}"
