@@ -155,9 +155,7 @@ spec:
             containerPort: {{ .Values.webdav.port }}
             protocol: TCP
         volumeMounts:
-          - mountPath: /media
-            name: temp
-          - mountPath: /media/webdav
+          - mountPath: /var/www/webdav
             name: storage
 {{- if .Values.persistence.subPath }}
             subPath: {{ .Values.persistence.subPath }}
