@@ -155,11 +155,34 @@ spec:
             containerPort: {{ .Values.webdav.port }}
             protocol: TCP
         volumeMounts:
-          - mountPath: /var/www/webdav
+          - mountPath: /var/www/webdav/conf
             name: storage
-{{- if .Values.persistence.subPath }}
-            subPath: {{ .Values.persistence.subPath }}
-{{- end }}
+            {{- if .Values.persistence.subPath }}
+            subPath: {{ .Values.persistence.subPath }}/conf
+            {{- else }}
+            subPath: conf
+          {{- end }}
+          - mountPath: /var/www/webdav/userdata
+            name: storage
+            {{- if .Values.persistence.subPath }}
+            subPath: {{ .Values.persistence.subPath }}/userdata
+            {{- else }}
+            subPath: userdata
+          {{- end }}
+          - mountPath: /var/www/webdav/addons
+            name: storage
+            {{- if .Values.persistence.subPath }}
+            subPath: {{ .Values.persistence.subPath }}/addons
+            {{- else }}
+            subPath: addons
+          {{- end }}
+          - mountPath: /var/www/webdav/.java
+            name: storage
+            {{- if .Values.persistence.subPath }}
+            subPath: {{ .Values.persistence.subPath }}/.java
+            {{- else }}
+            subPath: .java
+        {{- end }}
 {{- end }}
         resources:
           {{- toYaml .Values.resources | nindent 10 }}
