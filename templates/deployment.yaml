@@ -143,40 +143,42 @@ spec:
           {{- end }}
 {{- if .Values.webdav.enabled }}
       - name: {{ .Chart.Name }}-webdav
-        image: lead4good/webdav
-        command: [/bin/bash, -c, "sed -i s/80/{{ .Values.webdav.port }}/g /etc/nginx/sites-enabled/webdav-site.conf && /set_htpasswd.sh && nginx -g \"daemon off;\""]
+        image: ionelmc/webdav
+        command: [/bin/bash, -c, "sed -i s/8080/{{ .Values.webdav.port }}/g /etc/nginx/nginx.conf && nginx -g \"daemon off;\""]
         env:
           - name: WEBDAV_USERNAME
             value: "{{ .Values.webdav.user }}"
           - name: WEBDAV_PASSWORD
             value: "{{ .Values.webdav.pass }}"
+          - name: UID
+            value: "1000"
         ports:
           - name: webdav
             containerPort: {{ .Values.webdav.port }}
             protocol: TCP
         volumeMounts:
-          - mountPath: /var/www/webdav/conf
+          - mountPath: /media/conf
             name: storage
 {{- if .Values.persistence.subPath }}
             subPath: {{ .Values.persistence.subPath }}/conf
 {{- else }}
             subPath: conf
 {{- end }}
-          - mountPath: /var/www/webdav/userdata
+          - mountPath: /media/userdata
             name: storage
 {{- if .Values.persistence.subPath }}
             subPath: {{ .Values.persistence.subPath }}/userdata
 {{- else }}
             subPath: userdata
 {{- end }}
-          - mountPath: /var/www/webdav/addons
+          - mountPath: /media/addons
             name: storage
 {{- if .Values.persistence.subPath }}
             subPath: {{ .Values.persistence.subPath }}/addons
 {{- else }}
             subPath: addons
 {{- end }}
-          - mountPath: /var/www/webdav/.java
+          - mountPath: /media/.java
             name: storage
 {{- if .Values.persistence.subPath }}
             subPath: {{ .Values.persistence.subPath }}/.java
