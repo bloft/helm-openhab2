@@ -144,7 +144,7 @@ spec:
 {{- if .Values.webdav.enabled }}
       - name: {{ .Chart.Name }}-webdav
         image: lead4good/webdav
-        command: [/bin/bash, -c, "groupmod -g 1000 www-data && usermod -u 1000 -g 1000 www-data && sed -i s/80/{{ .Values.webdav.port }}/g /etc/nginx/sites-enabled/webdav-site.conf && /set_htpasswd.sh && nginx -g \"daemon off;\""]
+        command: [/bin/bash, -c, "groupmod -g 9001 www-data && usermod -u 9001 -g 9001 www-data && sed -i s/80/{{ .Values.webdav.port }}/g /etc/nginx/sites-enabled/webdav-site.conf && /set_htpasswd.sh && nginx -g \"daemon off;\""]
         env:
           - name: WEBDAV_USERNAME
             value: "{{ .Values.webdav.user }}"
