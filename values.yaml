@@ -84,7 +84,12 @@ sidecar:
     label: openhab_service
 
 volume:
-  other: {}
+  other:
+    - name: dev
+      mountPath: /dev/named
+      mount:
+        hostPath:
+          path: /dev/named
 # https://kubernetes.io/docs/concepts/storage/volumes/#hostpath
 #    - name: zwave
 #      mountPath: /dev/zwave

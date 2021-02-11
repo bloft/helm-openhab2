@@ -209,8 +209,6 @@ spec:
         - name: localtime
           hostPath:
             path: /etc/localtime
-        - name: temp
-          emptyDir: {}
         - name: timezone
           hostPath:
             path: /etc/timezone
