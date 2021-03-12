@@ -39,6 +39,11 @@ ingress:
     nginx.ingress.kubernetes.io/configuration-snippet: |
       add_header Set-Cookie X-OPENHAB-AUTH-HEADER=1;
       proxy_set_header Authorization "";
+
+      satisfy  any;
+      allow    192.168.1.0/24;
+      allow    127.0.0.1;
+      deny     all;
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
 
 persistence:
