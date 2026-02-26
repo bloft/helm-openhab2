@@ -81,6 +81,8 @@ spec:
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         env:
+          - name: TZ
+            value: "{{ .Values.timezone }}"
           - name: OPENHAB_HTTP_PORT
             value: "{{ .Values.service.port }}"
           {{- toYaml .Values.env | nindent 10 }}
@@ -103,12 +105,6 @@ spec:
             port: http
 
         volumeMounts:
-          - mountPath: /etc/localtime
-            name: localtime
-            readOnly: true
-          - mountPath: /etc/timezone
-            name: timezone
-            readOnly: true
           - mountPath: /openhab/conf
             name: storage
 {{- if .Values.persistence.subPath }}
@@ -206,12 +202,6 @@ spec:
 {{- else }}
           emptyDir: {}
 {{- end }}
-        - name: localtime
-          hostPath:
-            path: /etc/localtime
-        - name: timezone
-          hostPath:
-            path: /etc/timezone
         {{- range .Values.volume.other }}
         - name: {{ .name }}
           {{- toYaml .mount | nindent 10 }}

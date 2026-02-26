@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: openhab/openhab
-  tag: "3.1.0"
+  tag: "5.3.1"
   pullPolicy: IfNotPresent
 
 serviceAccount:
@@ -24,6 +24,8 @@ securityContext:
   # readOnlyRootFilesystem: true
   # runAsNonRoot: true
   # runAsUser: 1000
+
+timezone: "Europe/Copenhagen"
 
 service:
   type: ClusterIP
